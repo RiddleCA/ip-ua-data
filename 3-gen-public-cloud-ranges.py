@@ -22,7 +22,10 @@ response = requests.get(url)
 zipfile_bytes = io.BytesIO(response.content)
 with zipfile.ZipFile(zipfile_bytes) as z:
     with z.open("hostingRanges.tsv", "r") as f:
+      lineCount = 0
       for line in f:
+        lineCount += 1
+        print(lineCount)
         line = line.decode('utf-8')
         ip_range = line.strip().split('\t')
         # sometimes the last field is empty, so we use a trimmed version of the company name
@@ -40,9 +43,10 @@ with zipfile.ZipFile(zipfile_bytes) as z:
           subnets = ipaddress.summarize_address_range(first, last)
 
         # Summarize IP address range and write resulting subnets to file
-        with open(os.path.join(HOSTING_IPS_DIR,provider), 'a') as provider_file:
-          for subnet in subnets:
-            provider_file.write(str(subnet) + "\n")
+        if len(provider) <= 64:
+          with open(os.path.join(HOSTING_IPS_DIR,provider), 'a') as provider_file:
+            for subnet in subnets:
+              provider_file.write(str(subnet) + "\n")
 
 for filename in os.listdir(HOSTING_IPS_DIR):
   filepath = os.path.join(HOSTING_IPS_DIR, filename)
