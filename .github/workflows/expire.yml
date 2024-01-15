@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Remove expired IPs
-        run: awk -i inplace -v current_time=$(date +%s) '$2 > current_time' timestamps
+        run: awk -i inplace -v current_time=$(date +%s) '$2 > current_time' suspiciousips/operations
 
       - name: Push changes if updated
         run: |
