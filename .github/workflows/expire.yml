@@ -18,9 +18,17 @@ jobs:
           echo "builddate=$(date -Is)" >> $GITHUB_OUTPUT
           echo "epochdate=$(date +%s)" >> $GITHUB_OUTPUT
           
-      - uses: EndBug/add-and-commit@v9
-        with:
-          author_name: SiteHost NZ
-          author_email: support@sitehost.co.nz
-          message: "Automatic build date: ${{ steps.release.outputs.builddate }}"
-          tag: "${{ steps.release.outputs.epochdate }}"
+      - name: Stage files
+        run: git add .
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "support@sitehost.co.nz"
+          git config --global user.name "SiteHost NZ"
+          git commit -m "Filter expired rate-limits"
+
+      - name: fetch from master
+        run: git fetch origin main
+
+      - name: push code to master
+        run: git push origin HEAD:main
