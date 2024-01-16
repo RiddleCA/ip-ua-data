@@ -28,7 +28,7 @@ jobs:
           git commit -m "Filter expired rate-limits" || echo "Nothing to commit"
 
       - name: fetch from master
-        run: git fetch origin main
+        run: git pull origin main
 
       - name: push code to master
         run: git push origin HEAD:main
