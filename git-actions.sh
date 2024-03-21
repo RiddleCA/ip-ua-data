@@ -13,7 +13,7 @@ while [ $retries -lt $max_retries ]; do
 
     if [ $? -eq 0 ]; then
         echo "Git commands executed successfully."
-        return 0
+        exit 0
     else
         retries=$((retries + 1))
         echo "Attempt $retries failed. Retrying..."
