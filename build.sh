@@ -31,7 +31,7 @@ done
 
 current_time=$(date +%s)
 last_successful_run=$(iso_to_epoch "$timestamp")
-time_diff=$((current_time - timestamp_epoch))
+time_diff=$((current_time - last_successful_run))
 echo $last_successful_run
 echo $time_diff
 
