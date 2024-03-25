@@ -25,7 +25,7 @@ done
 
 echo "last build from api $1"
 current_time=$(date +%s)
-last_successful_run=date -d "$1" +%s
+last_successful_run= $(date -d "$1" +%s)
 time_diff=$((current_time - last_successful_run))
 echo $last_successful_run
 echo $time_diff
