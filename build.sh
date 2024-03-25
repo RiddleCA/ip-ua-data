@@ -29,8 +29,6 @@ for script in "${scripts[@]}"; do
     run_script "$script"
 done
 
-echo $1
-
 current_time=$(date +%s)
 last_successful_run=$(iso_to_epoch "$timestamp")
 time_diff=$((current_time - timestamp_epoch))
@@ -53,3 +51,5 @@ if [ ${#error_messages[@]} -gt 0 ]; then
         exit 1
     fi
 fi
+
+echo "build successful"
