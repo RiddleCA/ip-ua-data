@@ -14,27 +14,21 @@ jobs:
 
       - name: Install utils
         run: sudo apt-get update && sudo apt-get -y --no-install-recommends install jq && pip3 install netaddr
+        
+      - name: Fetch workflow runs
+        id: fetch_runs
+        run: RUNS=$(curl -s "https://api.github.com/repos/${{ github.repository }}/actions/runs") echo "::set-output name=runs::$RUNS"
+
+      - name: Extract timestamp of last successful "build" workflow run
+        id: extract_last_build_success
+        run: |
+          LAST_BUILD_SUCCESS=$(echo "$RUNS" | jq '.workflow_runs | map(select(.name == "Build" and .conclusion == "success")) | .[0].created_at')
+          echo "::set-output name=last_build_success::$LAST_BUILD_SUCCESS"
 
       - name: Run our scripts
         id: release
-        run: |
-          ./1-gen-blocked-ips.sh
-          ./2-gen-allowed-ips.sh
-          ./4-gen-user-agents.sh
-          ./5-gen-cdn-ips.sh
-          ./6-get-geo-ranges.py
-          echo "builddate=$(date -Is)" >> $GITHUB_OUTPUT
-          echo "epochdate=$(date +%s)" >> $GITHUB_OUTPUT
+        run: build.sh ${{ steps.extract_last_build_success.outputs.last_build_success }}
 
       - name: Push changes if updated
-        run: |
-          git config --global user.email "support@sitehost.co.nz"
-          git config --global user.name "SiteHost NZ"
-          git diff --quiet || (git add -A && git commit -m "Update from GitHub Actions" && git pull --rebase)
+        run: git-actions.sh
 
-      - uses: EndBug/add-and-commit@v9
-        with:
-          author_name: SiteHost NZ
-          author_email: support@sitehost.co.nz
-          message: "Automatic build date: ${{ steps.release.outputs.builddate }}"
-          tag: "${{ steps.release.outputs.epochdate }}"
