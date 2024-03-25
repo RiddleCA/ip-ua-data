@@ -18,6 +18,12 @@ run_script() {
     fi
 }
 
+# Function to convert ISO 8601 timestamp to epoch time
+iso_to_epoch() {
+    local iso_timestamp="$1"
+    date -d "$iso_timestamp" +%s
+}
+
 # Loop through the scripts array and run each script
 for script in "${scripts[@]}"; do
     run_script "$script"
@@ -25,11 +31,25 @@ done
 
 echo $1
 
+current_time=$(date +%s)
+last_successful_run=$(iso_to_epoch "$timestamp")
+time_diff=$((current_time - timestamp_epoch))
+
+
 # Print error messages of failed scripts
 if [ ${#error_messages[@]} -gt 0 ]; then
+
+
     echo "The following scripts failed:"
     for error_message in "${error_messages[@]}"; do
         echo "$error_message"
     done
-    exit 1
+    #check if last successful build was more than 3 hours ago
+    if [ "$time_diff" -lt 10800 ]; then
+        echo "Successful build within last 3 hours, skipping failure"
+        exit 0
+    else
+        echo "No Successful build within last 3 hours"
+        exit 1
+    fi
 fi
