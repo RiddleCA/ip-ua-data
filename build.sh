@@ -18,19 +18,14 @@ run_script() {
     fi
 }
 
-# Function to convert ISO 8601 timestamp to epoch time
-iso_to_epoch() {
-    local iso_timestamp="$1"
-    date -d "$iso_timestamp" +%s
-}
-
 # Loop through the scripts array and run each script
 for script in "${scripts[@]}"; do
     run_script "$script"
 done
+
 echo "last build from api $1"
 current_time=$(date +%s)
-last_successful_run=$(iso_to_epoch $1)
+last_successful_run=date -d "$1" +%s
 time_diff=$((current_time - last_successful_run))
 echo $last_successful_run
 echo $time_diff
