@@ -23,9 +23,9 @@ for script in "${scripts[@]}"; do
     run_script "$script"
 done
 
-last_build=$(echo $1 | tr -d '"')
+last_build=$(echo "$1" | tr -d '"')
 echo "last build from api $last_build"
-last_successful_run=$(date -d $last_build +"%s")
+last_successful_run=$(date -d "$last_build" +"%s")
 current_time=$(date +%s)
 time_diff=$((current_time - last_successful_run))
 echo $last_successful_run
