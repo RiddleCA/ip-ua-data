@@ -27,7 +27,7 @@ jobs:
 
       - name: Run our scripts
         id: release
-        run: build.sh ${{ steps.extract_last_build_success.outputs.last_build_success }}
+        run: ./build.sh ${{ steps.extract_last_build_success.outputs.last_build_success }}
 
       - name: Push changes if updated
         run: git-actions.sh
