@@ -20,7 +20,7 @@ run_script() {
 
 # Function to convert ISO 8601 timestamp to epoch time
 iso_to_epoch() {
-    date -d $1 +%s
+    date -d '$1' +%s
 }
 
 # Loop through the scripts array and run each script
@@ -29,7 +29,7 @@ for script in "${scripts[@]}"; do
 done
 
 current_time=$(date +%s)
-last_successful_run=$(iso_to_epoch "$timestamp")
+last_successful_run=$(iso_to_epoch $1)
 time_diff=$((current_time - last_successful_run))
 echo $last_successful_run
 echo $time_diff
