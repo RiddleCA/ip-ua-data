@@ -24,12 +24,9 @@ for script in "${scripts[@]}"; do
 done
 
 last_build=$(echo $1 | tr -d '"')
-echo "last build from api $last_build"
 last_successful_run=$(date -d $last_build +"%s")
 current_time=$(date +%s)
 time_diff=$((current_time - last_successful_run))
-echo $last_successful_run
-echo $time_diff
 
 # Print error messages of failed scripts
 if [ ${#error_messages[@]} -gt 0 ]; then
