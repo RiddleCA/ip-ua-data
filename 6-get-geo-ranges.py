@@ -14,7 +14,7 @@ if os.path.exists(GEO_IPS_DIR):
 os.mkdir(GEO_IPS_DIR)
 
 # Process upstream IP to country data
-ip2country_v4_url = "https://iptoasn.com/data/ip2country-v4.tsv.gz"
+ip2country_v4_url = "https://iptoasn.com/data/ip2country-v4.tsv.g"
 ip2country_v6_url = "https://iptoasn.com/data/ip2country-v6.tsv.gz"
 
 for url in [ip2country_v4_url, ip2country_v6_url]:
